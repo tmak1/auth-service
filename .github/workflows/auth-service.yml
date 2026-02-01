@@ -1,25 +1,21 @@
 name: Auth Service CI
 
 on:
-  # Trigger on push/PR to main, BUT only if files in 'auth-service' changed
+  # Trigger on push/PR to main, BUT only if files in changed
   push:
     branches: ["main"]
     paths:
-      - "auth-service/**"
+      - "./**"
       - ".github/workflows/auth-service.yml"
   pull_request:
     branches: ["main"]
     paths:
-      - "auth-service/**"
+      - "./**"
 
 jobs:
   # --- JOB 1: UNIT TESTS ---
   test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./auth-service
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -44,10 +40,6 @@ jobs:
   build-image:
     needs: test # Only build if tests pass
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./auth-service
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
