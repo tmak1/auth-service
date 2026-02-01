@@ -1,0 +1,8 @@
+flask==3.0.0
+flask-cors==4.0.0
+PyJWT==2.8.0
+psycopg2-binary==2.9.9
+SQLAlchemy==2.0.25
+Werkzeug==3.0.1
+pytest==7.4.0
+debugpy==1.8.0

@@ -1,0 +1,57 @@
+services:
+  auth-db:
+    image: postgres:13-alpine
+    container_name: auth-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - taskmaster-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  auth-service:
+    container_name: auth-service
+    image: auth-service:latest
+    build:
+      context: .
+      args:
+        - PORT=${PORT}
+        - DEBUG_PORT=${DEBUG_PORT}
+    ports:
+      - "${PORT}:${PORT}"
+      - "${DEBUG_PORT}:${DEBUG_PORT}"
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=auth-db
+    depends_on:
+      auth-db:
+        condition: service_healthy
+    command:
+      [
+        "python",
+        "-m",
+        "debugpy",
+        "--listen",
+        "0.0.0.0:${DEBUG_PORT}",
+        "main.py",
+      ]
+    networks:
+      - taskmaster-net
+
+volumes:
+  auth-db-data:
+
+networks:
+  taskmaster-net:
+    external: true

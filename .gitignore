@@ -1,0 +1,17 @@
+# vscode
+.vscode/
+
+# Virtual Environments
+venv/
+.venv/
+env/
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Distribution / Build
+dist/
+build/
+*.egg-info/
